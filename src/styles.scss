@@ -5,6 +5,9 @@ $theme-colors: (
     "second": #3dc8d9ff,
     "dark":#003462ff,
     "light": #fafafaff,
+    "success": #238212ff,
+    "warning": #ccad12ff,
+    "danger": #c22115ff
 );
 
 @import '../node_modules/bootstrap/scss/bootstrap.scss';

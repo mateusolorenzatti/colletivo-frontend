@@ -1,0 +1,57 @@
+<div class="container">
+    <div class="card col-md-6 offset-md-3 mt-3 p-4">
+        <h5 class="card-title"> Sign Up to Colletivo </h5>
+    
+        <form [formGroup]="newUserForm" class="form mt-4" (submit)="createUser()">
+            
+            <div class="form-group">
+                <input formControlName="userName" name="userName" class="form-control" placeholder="Username" type="text" autofocus>
+            </div>
+            <br>
+            
+            <div class="form-group">
+                <input formControlName="firstName" name="firstName" class="form-control" placeholder="First Name" type="text" >
+            </div>
+            <br>
+            
+            <div class="form-group">
+                <input formControlName="lastName" name="lastName" class="form-control" placeholder="Last Name" type="text" >
+            </div>
+            <br>
+           
+            <div class="form-group">
+                <input formControlName="userEmail" name="userEmail" class="form-control" placeholder="Email" type="email" >
+            </div>
+            <br>
+            
+            <div class="form-group">
+                <input formControlName="userPass" name="userPass" class="form-control" placeholder="Password" type="password">
+            </div>
+            <br>
+
+            <div class="form-group">
+                <input formControlName="confirmUserPass" name="confirmUserPass" class="form-control" placeholder="Confirm Password" type="password">
+            </div>
+            <br>
+
+            <div *ngIf="erro" class="alert alert-danger" role="alert">
+                Unable to create account. Check if password is correct or try another username.
+            </div>
+            
+            <div *ngIf="help" class="alert alert-info" role="alert">
+                Creating user... When everything is ok you will be taken back to login.
+            </div>
+
+            <button [disabled]="(newUserForm.invalid || newUserForm.pending)"
+                    type="submit" 
+                    class="btn btn-success w-100" 
+                    createUser> 
+                        Submit 
+            </button>
+
+            <a class="btn btn-link mt-2 text-center w-100" [routerLink]="['']"> Go back </a>
+            
+            <br/>
+        </form>
+    </div>
+</div>
