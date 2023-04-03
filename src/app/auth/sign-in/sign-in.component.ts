@@ -35,7 +35,7 @@ export class SignInComponent {
     this.authService
       .authenticate(username, password)
       .subscribe(
-        () => /* this.router.navigate(['dashboard']) */ console.log("Auth Works!"),
+        () => this.router.navigate(['home']),
         err => {
           console.log(err);
           this.loginForm.reset();

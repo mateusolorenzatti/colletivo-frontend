@@ -1,16 +1,19 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { RedirectIfLoggedGuard } from "../core/auth/redirect-if-logged.guard";
 import { SignInComponent } from "./sign-in/sign-in.component";
 import { SignUpComponent } from "./sign-up/sign-up.component";
 
 const routes: Routes = [
     {
         path: 'signin',
-        component: SignInComponent
+        component: SignInComponent,
+        canActivate: [RedirectIfLoggedGuard]
     },
     {
         path: 'signup',
-        component: SignUpComponent
+        component: SignUpComponent,
+        canActivate: [RedirectIfLoggedGuard]
     }
 ];
 
