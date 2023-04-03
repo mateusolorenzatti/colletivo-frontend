@@ -11,8 +11,9 @@ import { UserService } from 'src/app/core/user/user.service';
 })
 export class SignUpComponent {
   newUserForm: FormGroup;
-  erro: boolean = false;
+  error: boolean = false;
   help: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -81,19 +82,21 @@ export class SignUpComponent {
 
     if (user.password != this.newUserForm.get('confirmUserPass')?.value) {
       //this.newUserForm.reset();
-      this.erro = true;
+      this.errorMessage = "Passwords don't match."
+      this.error = true;
       this.help = false;
       return;
     }
-
+    
     this.userService
-      .signUp(user)
-      .subscribe(
-        () => this.router.navigate(['']),
-        err => {
+    .signUp(user)
+    .subscribe(
+      () => this.router.navigate(['']),
+      err => {
           console.log(err);
           //this.newUserForm.reset();
-          this.erro = true;
+          this.errorMessage = err.error.message
+          this.error = true;
           this.help = false;
         }
       );

@@ -34,8 +34,9 @@
             </div>
             <br>
 
-            <div *ngIf="erro" class="alert alert-danger" role="alert">
-                Unable to create account. Check if password is correct or try another username.
+            <div *ngIf="error" class="alert alert-danger" role="alert">
+                Unable to create account. Mayve this can help: <br>
+                {{ errorMessage }}
             </div>
             
             <div *ngIf="help" class="alert alert-info" role="alert">

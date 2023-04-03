@@ -17,7 +17,7 @@ export class SignInComponent {
     private router: Router) {
 
     this.loginForm = this.formBuilder.group({
-      userEmail: ['', Validators.required],
+      userName: ['', Validators.required],
       userPass: ['', Validators.required]
     });
   }
@@ -27,13 +27,13 @@ export class SignInComponent {
 
   login() {
 
-    const userEmail = this.loginForm.get('userEmail')?.value;
+    const username = this.loginForm.get('userName')?.value;
     const password = this.loginForm.get('userPass')?.value;
 
     //console.log(userEmail + password);
 
     this.authService
-      .authenticate(userEmail, password)
+      .authenticate(username, password)
       .subscribe(
         () => /* this.router.navigate(['dashboard']) */ console.log("Auth Works!"),
         err => {
