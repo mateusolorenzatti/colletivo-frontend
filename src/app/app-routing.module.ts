@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SignInComponent } from './auth/sign-in/sign-in.component';
-import { LoginRequiredGuard } from './core/auth/login-required.guard';
 import { RedirectIfLoggedGuard } from './core/auth/redirect-if-logged.guard';
-import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
@@ -12,12 +10,9 @@ const routes: Routes = [
     component: SignInComponent,
     canActivate: [RedirectIfLoggedGuard]
   },
-  // ToDo: Create child roude for home module
-  {  
+  {
     path: 'home',
-    pathMatch: 'full',
-    component: HomeComponent,
-    canActivate: [LoginRequiredGuard]
+    loadChildren: () => import('src/app/home/home.module').then(m => m.HomeModule)
   },
   {
     path: 'auth',
