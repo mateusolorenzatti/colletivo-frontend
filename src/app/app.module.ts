@@ -5,9 +5,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
-import { SharedModule } from './shared/shared.module';
 import { RequestInterceptor } from './core/auth/request.interceptor';
 import { HomeModule } from './home/home.module';
+import { NavbarModule } from './shared/navbar/navbar.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import { HomeModule } from './home/home.module';
     HttpClientModule,
     
     AuthModule,
-    SharedModule,
+    NavbarModule,
     HomeModule,
   ],
   providers: [
