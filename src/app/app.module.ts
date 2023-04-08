@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { RequestInterceptor } from './core/auth/request.interceptor';
 import { HomeModule } from './home/home.module';
 import { NavbarModule } from './shared/navbar/navbar.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [

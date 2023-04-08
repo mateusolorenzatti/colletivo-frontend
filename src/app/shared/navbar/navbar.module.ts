@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     MenuModule,
-    RouterModule
+    RouterModule,
   ]
 })
 export class NavbarModule { }
