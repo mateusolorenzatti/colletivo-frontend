@@ -8,7 +8,6 @@ import { UserService } from 'src/app/core/user/user.service';
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent implements OnInit {
-
   public user!: User
 
   constructor(

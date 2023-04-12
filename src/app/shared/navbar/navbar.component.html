@@ -2,7 +2,7 @@
     <div class="container">
 
         <div class="text-light">
-            <div class="btn text-light" (keyup.space)="menu.toggle()" (click)="menu.toggle()">
+            <div class="btn text-light" (keyup.space)="menu.toggle()" (click)="menu.toggle()" *ngIf="isLogged()">
                 <i tabindex="0" class="fa fa-bars mx-3"></i>
             </div>
 
