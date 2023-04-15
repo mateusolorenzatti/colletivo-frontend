@@ -12,17 +12,85 @@ export class MapComponent implements OnInit {
   map!: mapboxgl.Map;
   style = 'mapbox://styles/mapbox/streets-v11';
 
+  markers: mapboxgl.Marker[] = [];
+  newMarkerMode: boolean = true;
+
   constructor() { }
 
-  ngOnInit(){
+  ngOnInit() {
+    this.initializeMap()
+  }
+
+  initializeMap() {
     (mapboxgl as any).accessToken = environment.mapbox.accessToken;
-  
+
     this.map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-51.346179, -29.225594],
+      center: [-51.3433, -29.2225],
       zoom: 12
     });
+
+    this.map.on('click', (event) => {
+      if (this.isMarkerTooClose(event.lngLat)) {
+        console.log('Marker is too close!');
+      } else {
+        this.addMarker(event.lngLat);
+      }
+    });
+  }
+
+  addMarker(lngLat: mapboxgl.LngLat) {
+    let newMarker: mapboxgl.Marker = new mapboxgl.Marker({
+      draggable: true
+    })
+      .setLngLat(lngLat)
+      .addTo(this.map);
+
+    console.log('Marker added to:', lngLat)
+
+    newMarker.on('dragend', () => {
+      console.log('Marker dragged to:', newMarker.getLngLat());
+    });
+
+    const popup = new mapboxgl.Popup({ offset: 25 })
+      .setHTML(`
+        <p> Stop #${this.markers.length + 1} </p> 
+        <a class="btn btn-sm btn-danger marker-remove" id="m-${this.markers.length + 1}">
+          <i tabindex="0" class="fa fa-trash mx-3"></i>
+        </a>`)
+      .addTo(this.map);
+    
+    newMarker.setPopup(popup)    
+
+    this.markers.push(newMarker)
+
+    console.log(this.markers)
+
+    this.newMarkerMode = false; // switch to popup mode
+  }
+
+  isMarkerTooClose(lngLat: mapboxgl.LngLat): boolean {
+    const minDistance = 25; // minimum distance in meters between markers
+    for (const marker of this.markers) {
+      const distance = marker.getLngLat().distanceTo(lngLat);
+      if (distance < minDistance) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  clearMap() {
+    this.markers.forEach(marker => {
+      marker.remove()
+    })
+
+    this.markers = []
+  }
+
+  removeMarker(markerId: number){
+    console.log("Remover o: " + markerId )
   }
 
   add_line(coordenadas: number[][], cor: string = '#ff0000') {
@@ -57,15 +125,15 @@ export class MapComponent implements OnInit {
     });
   }
 
-  // add_point(coordenadas: number[]) {
-  //   this.map.on('load', () => {
-  //     this.map.setCenter(coordenadas);
+  add_point(coordenadas: [number, number]) {
+    this.map.on('load', () => {
+      this.map.setCenter(coordenadas);
 
-  //     const marker = new mapboxgl.Marker()
-  //       .setLngLat(coordenadas)
-  //       .addTo(this.map);
-  //   });
-  // }
+      const marker = new mapboxgl.Marker()
+        .setLngLat(coordenadas)
+        .addTo(this.map);
+    });
+  }
 
   // add_multi_points(coordenadas: number[][]) {
   //   this.map.on('load', () => {
