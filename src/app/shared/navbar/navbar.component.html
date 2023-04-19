@@ -22,7 +22,9 @@
         </div>
 
         <co-menu #menu>
-            <co-menu-item icon="fa-home" nomeItem="Home" [routerLink]="['home']"> </co-menu-item>
+            <co-menu-item icon="fa-home" nomeItem="Home" [routerLink]="['/', 'home']"> </co-menu-item>
+            <co-menu-item icon="fa-map" nomeItem="Criar Rota" [routerLink]="['/', 'route', 'create']"> </co-menu-item>
+            <co-menu-item icon="fa-map-marker" nomeItem="Criar Parada" [routerLink]="['home']"> </co-menu-item>
         </co-menu>
     </div>
 </nav>

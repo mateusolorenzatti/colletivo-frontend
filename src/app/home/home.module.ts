@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
 import { MapModule } from '../shared/map/map.module';
+import { AppRoutingModule } from '../app-routing.module';
 
 @NgModule({
   declarations: [HomeComponent],

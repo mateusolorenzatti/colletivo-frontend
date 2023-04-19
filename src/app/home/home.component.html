@@ -1,10 +1,22 @@
 <div class="row m-3">
-    <div class="col-6 offset-3">
-        <div class="card">
-            <div class="card-header">
-                Map
-            </div>
-            <co-map #map> </co-map>
-        </div>
+    <div class="col-6">
+        <a class="btn btn-lg btn-dark py-5 w-100" [routerLink]="['/', 'route', 'create']">
+            <i class="fa fa-map mx-2"></i>
+            Criar Rota
+        </a>
     </div>
+    <div class="col-3">
+        <button class="btn btn-lg btn-dark py-5 w-100">
+            <i class="fa fa-map-marker mx-2"></i>
+            Criar Parada
+        </button>
+    </div>
+    <div class="col-3">
+        <button class="btn btn-lg btn-dark py-5 w-100">
+            <i class="fa fa-star"></i>
+            Click Here
+        </button>
+    </div>
+    
+
 </div>
