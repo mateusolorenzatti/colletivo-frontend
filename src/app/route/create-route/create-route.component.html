@@ -1,10 +1,44 @@
-<div class="row m-3">
-    <div class="col-6 offset-3">
+<div class="row p-3">
+    <div class="col-10 offset-1">
+        <co-header [text]="'Mapa do Trajeto'"> </co-header>
         <div class="card">
-            <div class="card-header">
-                Map
-            </div>
-            <co-map #map> </co-map>
+            <co-map #map [editable]="true"> </co-map>
         </div>
     </div>
 </div>
+
+<div class="row p-3">
+    <div class="col-10 offset-1">
+        <co-header [text]="'Lista de Paradas'"> </co-header>
+        <div class="">
+            <div *ngFor="let stopTime of stopTimeDraftList">
+                <co-stop-time-item-create [stopTimeDraft]="stopTime" (removed)="onStopTimeDraftRemoved($event)"> </co-stop-time-item-create>
+            </div>
+
+            <div *ngIf="stopTimeDraftList.length == 0">
+                <div class="card">
+                    <p class="m-2 text-muted text-center"> Selecione as paradas no mapa para adicionar ao trajeto </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row p-3">
+    <div class="col-10 offset-1">
+        <co-header [text]="'Informações da Rota'"> </co-header>
+        <co-route-form></co-route-form>
+    </div>
+</div>
+
+<div class="row p-3">
+    <div class="col-10 offset-1">
+        <a class="btn btn-danger" [routerLink]="['/', 'home']">
+            Voltar
+        </a>
+    </div>
+</div>
+
+<br>
+<br>
+<br>

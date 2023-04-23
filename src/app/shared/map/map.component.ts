@@ -15,6 +15,8 @@ export class MapComponent implements OnInit {
   markers: mapboxgl.Marker[] = [];
   newMarkerMode: boolean = true;
 
+  @Input('editable') editable: Boolean = false
+
   constructor() { }
 
   ngOnInit() {
@@ -31,14 +33,16 @@ export class MapComponent implements OnInit {
       zoom: 12
     });
 
-    this.map.on('click', (event) => {
-      if (this.isMarkerTooClose(event.lngLat)) {
-        console.log('Marker is too close!');
-      } else {
-        this.addMarker(event.lngLat);
-      }
-    });
+    // this.map.on('click', (event) => {
+    //   if (this.isMarkerTooClose(event.lngLat)) {
+    //     console.log('Marker is too close!');
+    //   } else {
+    //     this.addMarker(event.lngLat);
+    //   }
+    // });
   }
+
+  /*
 
   addMarker(lngLat: mapboxgl.LngLat) {
     let newMarker: mapboxgl.Marker = new mapboxgl.Marker({
@@ -81,6 +85,12 @@ export class MapComponent implements OnInit {
     return false;
   }
 
+  removeMarker(markerId: number){
+    console.log("Remover o: " + markerId )
+  }
+  
+  */
+
   clearMap() {
     this.markers.forEach(marker => {
       marker.remove()
@@ -89,12 +99,8 @@ export class MapComponent implements OnInit {
     this.markers = []
   }
 
-  removeMarker(markerId: number){
-    console.log("Remover o: " + markerId )
-  }
-
-  add_line(coordenadas: number[][], cor: string = '#ff0000') {
-    this.set_center(coordenadas);
+  addLine(coordenadas: number[][], cor: string = '#ff0000') {
+    // this.set_center(coordenadas);
 
     this.map.on('load', () => {
       this.map.addSource('route', {
@@ -125,41 +131,54 @@ export class MapComponent implements OnInit {
     });
   }
 
-  add_point(coordenadas: [number, number]) {
+  addPoint(
+    parameters: {
+      id: string,
+      coordinates: [number, number],
+      popupInfo?: { code: string, description: string },
+      callbackFunc: Function
+    }
+  ) {
+
+    console.log(parameters.id + ' - ' + parameters.popupInfo?.description)
+
     this.map.on('load', () => {
-      this.map.setCenter(coordenadas);
+      this.map.setCenter(parameters.coordinates)
 
-      const marker = new mapboxgl.Marker()
-        .setLngLat(coordenadas)
-        .addTo(this.map);
-    });
+      let newMarker = new mapboxgl.Marker()
+        .setLngLat(parameters.coordinates)
+        .addTo(this.map)
+
+      if (parameters.popupInfo) {
+        const popup = new mapboxgl.Popup({ offset: 25, className: '3' })
+          .setHTML(`
+              <p> Parada #${parameters.popupInfo.code} </p> 
+              <p> ${parameters.popupInfo.description} </p>`)
+          .addTo(this.map);
+
+        newMarker.setPopup(popup)
+        newMarker.togglePopup()
+
+        newMarker.getElement().addEventListener('click', () => parameters.callbackFunc(parameters.id) )
+      }
+
+    })
   }
 
-  // add_multi_points(coordenadas: number[][]) {
-  //   this.map.on('load', () => {
+  // setCenter(coordenadas: number[][]) {
+  //   let longs: number[] = [], lats: number[] = [];
 
-  //     coordenadas.forEach(coordenada =>
-  //       new mapboxgl.Marker()
-  //         .setLngLat(coordenada)
-  //         .addTo(this.map)
-  //     );
+  //   coordenadas.forEach(coordenada => {
+  //     longs.push(coordenada[0]);
+  //     lats.push(coordenada[1]);
   //   });
+
+  //   const coordenada = {
+  //     lon: (longs.reduce((soma, coo) => (soma + coo)) / longs.length),
+  //     lat: (lats.reduce((soma, coo) => (soma + coo)) / lats.length)
+  //   };
+
+  //   this.map.setCenter(coordenada);
   // }
-
-  set_center(coordenadas: number[][]) {
-    let longs: number[] = [], lats: number[] = [];
-
-    coordenadas.forEach(coordenada => {
-      longs.push(coordenada[0]);
-      lats.push(coordenada[1]);
-    });
-
-    const coordenada = {
-      lon: (longs.reduce((soma, coo) => (soma + coo)) / longs.length),
-      lat: (lats.reduce((soma, coo) => (soma + coo)) / lats.length)
-    };
-
-    this.map.setCenter(coordenada);
-  }
 
 }

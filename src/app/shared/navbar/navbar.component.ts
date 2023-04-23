@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from 'src/app/core/user/user';
-import { UserService } from 'src/app/core/user/user.service';
+import { User } from 'src/app/core/entities/user/user';
+import { UserService } from 'src/app/core/entities/user/user.service';
 
 @Component({
   selector: 'co-navbar',

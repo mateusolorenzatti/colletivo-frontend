@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { RequestInterceptor } from './core/auth/request.interceptor';
 import { HomeModule } from './home/home.module';
 import { NavbarModule } from './shared/navbar/navbar.module';
+import { StopTimeModule } from './stop-time/stop-time.module';
+import { RouteModule } from './route/route.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { NavbarModule } from './shared/navbar/navbar.module';
     AuthModule,
     NavbarModule,
     HomeModule,
+    RouteModule,
+    StopTimeModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }

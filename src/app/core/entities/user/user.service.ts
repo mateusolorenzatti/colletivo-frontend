@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ConfigService } from '../config/config.service';
-import { TokenService } from '../token/token.service';
+import { ConfigService } from '../../config/config.service';
+import { TokenService } from '../../token/token.service';
 import { User } from './user';
 import { tap } from 'rxjs';
 

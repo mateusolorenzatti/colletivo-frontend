@@ -4,15 +4,22 @@ import { RouteRoutingModule } from './route-routing.module';
 import { MapModule } from '../shared/map/map.module';
 import { CreateRouteComponent } from './create-route/create-route.component';
 import { MapComponent } from '../shared/map/map.component';
+import { HeaderComponent } from '../shared/header/header.component';
+import { HeaderModule } from '../shared/header/header.module';
+import { StopTimeModule } from '../stop-time/stop-time.module';
+import { RouteFormComponent } from './create-route/route-form/route-form.component';
 
 @NgModule({
   declarations: [
-    CreateRouteComponent
+    CreateRouteComponent,
+    RouteFormComponent
   ],
   imports: [
     CommonModule,
     RouteRoutingModule,
-    MapModule
+    MapModule,
+    HeaderModule,
+    StopTimeModule
   ]
 })
 export class RouteModule { }

@@ -6,7 +6,9 @@ const API_URL = environment.API_URL;
 const apiRoutes: { [key: string]: string } = { 
   signin: '/auth/signin',
   signup: '/auth/signup',
-  getuser: '/auth/user'
+  getuser: '/auth/user',
+
+  stops: '/stops'
 }
 
 @Injectable({
