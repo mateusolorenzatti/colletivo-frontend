@@ -2,22 +2,23 @@ import { Component, OnInit, QueryList, ViewChild } from '@angular/core';
 import { StopTimeDraft } from 'src/app/core/entities/stop-time/stop-time-draft';
 import { Stop } from 'src/app/core/entities/stop/stop';
 import { StopService } from 'src/app/core/entities/stop/stop.service';
+import { MapService } from 'src/app/core/map/map.service';
 import { MapComponent } from 'src/app/shared/map/map.component';
-import { StopTimeModule } from 'src/app/stop-time/stop-time.module';
 
 @Component({
   selector: 'app-create-route',
   templateUrl: './create-route.component.html'
 })
 export class CreateRouteComponent implements OnInit {
-  private stops?: Stop[]
+  private stops!: Stop[]
 
   stopTimeDraftList: StopTimeDraft[] = []
 
   @ViewChild('map') map: MapComponent
 
   constructor(
-    private stopService: StopService
+    private stopService: StopService,
+    private mapService: MapService
   ) {
     this.map = new MapComponent()
   }
@@ -41,10 +42,30 @@ export class CreateRouteComponent implements OnInit {
               this.stopTimeDraftList.push({
                 // arrival_time
                 stop_sequence: this.stopTimeDraftList.length + 1,
-                stop: this.stops?.find(stop => stop.id == clickedStopId)
+                stop: this.stops.find(stop => stop.id == clickedStopId)
               })
 
               console.log(this.stopTimeDraftList)
+
+              let position = this.stopTimeDraftList.length
+
+              // Generates the route from the previous point
+              if(position > 1){
+                this.map.addDirections(
+                  // pointA
+                  [ 
+                    this.stopTimeDraftList[ position - 2 ].stop?.stop_lon as number,
+                    this.stopTimeDraftList[ position - 2 ].stop?.stop_lat as number 
+                  ],
+                  // pointB
+                  [ 
+                    this.stopTimeDraftList[ position - 1 ].stop?.stop_lon as number, 
+                    this.stopTimeDraftList[ position - 1 ].stop?.stop_lat as number
+                  ],
+                  this.mapService
+                )
+              }
+
             }
           }
           )

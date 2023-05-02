@@ -8,6 +8,7 @@ import { HeaderComponent } from '../shared/header/header.component';
 import { HeaderModule } from '../shared/header/header.module';
 import { StopTimeModule } from '../stop-time/stop-time.module';
 import { RouteFormComponent } from './create-route/route-form/route-form.component';
+import { MapService } from '../core/map/map.service';
 
 @NgModule({
   declarations: [

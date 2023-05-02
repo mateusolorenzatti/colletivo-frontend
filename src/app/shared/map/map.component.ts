@@ -1,7 +1,10 @@
 import { environment } from '../../../environments/environment';
 import { Component, OnInit, Input } from '@angular/core';
 
+import { v4 as uuidv4 } from 'uuid'
 import * as mapboxgl from 'mapbox-gl'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import { MapService } from 'src/app/core/map/map.service';
 
 @Component({
   selector: 'co-map',
@@ -9,15 +12,17 @@ import * as mapboxgl from 'mapbox-gl'
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit {
-  map!: mapboxgl.Map;
-  style = 'mapbox://styles/mapbox/streets-v11';
+  map!: mapboxgl.Map
+  style = 'mapbox://styles/mapbox/streets-v11'
+
+  geocoder!: MapboxGeocoder
 
   markers: mapboxgl.Marker[] = [];
   newMarkerMode: boolean = true;
 
   @Input('editable') editable: Boolean = false
 
-  constructor() { }
+  constructor( ) { }
 
   ngOnInit() {
     this.initializeMap()
@@ -32,6 +37,20 @@ export class MapComponent implements OnInit {
       center: [-51.3433, -29.2225],
       zoom: 12
     });
+
+    // this.geocoder = new MapboxGeocoder({
+    //   accessToken: mapboxgl.accessToken,
+    //   mapboxgl
+    // });
+
+    // // *************
+    // this.geocoder.on('result', ($event) => {
+    //   const { result } = $event;
+    //   this.geocoder.clear();
+    //   console.log('*********', result)
+    // })
+
+    // this.geocoder.addTo(this.map)
 
     // this.map.on('click', (event) => {
     //   if (this.isMarkerTooClose(event.lngLat)) {
@@ -159,10 +178,59 @@ export class MapComponent implements OnInit {
         newMarker.setPopup(popup)
         newMarker.togglePopup()
 
-        newMarker.getElement().addEventListener('click', () => parameters.callbackFunc(parameters.id) )
+        newMarker.getElement().addEventListener('click', () => parameters.callbackFunc(parameters.id))
       }
 
     })
+  }
+
+  addDirections(
+    pointA: [number, number], 
+    pointB: [number, number],
+    mapService: MapService
+  ): void {
+
+    mapService.requestDirections( pointA, pointB ).subscribe(
+      (res: any) => {
+        const data = res.routes[0];
+        const route = data.geometry.coordinates;
+        const uuid = uuidv4()
+
+        console.log(route)
+
+        this.map.addSource(uuid, {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'LineString',
+              coordinates: route
+            }
+          }
+        });
+  
+  
+        this.map.addLayer({
+          id: uuid,
+          type: 'line',
+          source: uuid,
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            'line-color': 'red',
+            'line-width': 5
+          }
+        });
+  
+        // this.wayPoints = route;
+        this.map.fitBounds([route[0], route[route.length - 1]], {
+          padding: 100
+        })
+      }
+    )
   }
 
   // setCenter(coordenadas: number[][]) {
