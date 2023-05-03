@@ -39,6 +39,14 @@ export class CreateRouteComponent implements OnInit {
               description: stop.stop_name + ''
             },
             callbackFunc: (clickedStopId: string) => {
+              // Cannot select a stop twice
+              if(
+                this.stopTimeDraftList.length > 0 &&
+                this.stopTimeDraftList.filter(stop => stop.stop?.id == clickedStopId).length > 0
+              ){
+                return
+              }
+
               this.stopTimeDraftList.push({
                 // arrival_time
                 stop_sequence: this.stopTimeDraftList.length + 1,
@@ -76,12 +84,31 @@ export class CreateRouteComponent implements OnInit {
   }
 
   onStopTimeDraftRemoved(stopTimeDraft: StopTimeDraft) {
+    const resultRecreateDirections = this.map.recreateDirections(
+      stopTimeDraft, 
+      (
+        stopTimeDraft.stop?.id == this.stopTimeDraftList[0].stop?.id 
+        || 
+        stopTimeDraft.stop?.id == this.stopTimeDraftList[this.stopTimeDraftList.length - 1].stop?.id
+      )
+    )
+
+    if(!resultRecreateDirections.isEdgePoint){
+      this.map.addDirections(
+        resultRecreateDirections.pointA,
+        resultRecreateDirections.pointB,
+        this.mapService
+      )
+    }
+
     this.stopTimeDraftList = this.stopTimeDraftList.filter(
       stopTimeDraftTemp => 
         !(stopTimeDraftTemp.stop?.id == stopTimeDraft.stop?.id 
         && 
         stopTimeDraftTemp.stop_sequence == stopTimeDraft.stop_sequence)
     )
+
+    
 
     this.stopTimeDraftList = this.stopTimeDraftList.map(
       stopTime => { 

@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 import * as mapboxgl from 'mapbox-gl'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import { MapService } from 'src/app/core/map/map.service';
+import { StopTimeDraft } from 'src/app/core/entities/stop-time/stop-time-draft';
 
 @Component({
   selector: 'co-map',
@@ -19,6 +20,8 @@ export class MapComponent implements OnInit {
 
   markers: mapboxgl.Marker[] = [];
   newMarkerMode: boolean = true;
+
+  directions: any[] = []
 
   @Input('editable') editable: Boolean = false
 
@@ -179,8 +182,9 @@ export class MapComponent implements OnInit {
         newMarker.togglePopup()
 
         newMarker.getElement().addEventListener('click', () => parameters.callbackFunc(parameters.id))
-      }
 
+        this.markers.push(newMarker)
+      }
     })
   }
 
@@ -210,7 +214,6 @@ export class MapComponent implements OnInit {
           }
         });
   
-  
         this.map.addLayer({
           id: uuid,
           type: 'line',
@@ -224,11 +227,20 @@ export class MapComponent implements OnInit {
             'line-width': 5
           }
         });
+
+        this.directions.push({
+          data: res,
+          pointA: pointA,
+          pointB: pointB,
+          id: uuid
+        })
+
+        console.log(this.directions)
   
         // this.wayPoints = route;
-        this.map.fitBounds([route[0], route[route.length - 1]], {
-          padding: 100
-        })
+        // this.map.fitBounds([route[0], route[route.length - 1]], {
+        //   padding: 100
+        // })
       }
     )
   }
@@ -249,4 +261,46 @@ export class MapComponent implements OnInit {
   //   this.map.setCenter(coordenada);
   // }
 
+  recreateDirections(
+    removedStopTime: StopTimeDraft,
+    isEdgePoint: Boolean
+  ): { pointA: [number, number], pointB: [number, number], isEdgePoint: Boolean } {
+    const removedStopCoordinates = [
+      removedStopTime.stop?.stop_lon,
+      removedStopTime.stop?.stop_lat
+    ]
+
+    let newPointA: [number, number] = [0,0], newPointB: [number, number] = [0,0]
+    
+    this.directions.forEach(direction => {
+      if(
+        (direction.pointA[0] == removedStopCoordinates[0] && direction.pointA[1] == removedStopCoordinates[1])
+        ||
+        (direction.pointB[0] == removedStopCoordinates[0] && direction.pointB[1] == removedStopCoordinates[1])
+      ){
+        // console.log("Remover essa diretion: " + direction)
+        this.map.removeLayer(direction.id)
+        this.directions = this.directions.filter(dir => dir.id !== direction.id)
+
+        // If it is not a edge point, it means the route must be reorganized
+        if(!isEdgePoint){
+          // If it is the point A, the new point B assumes the point B
+          if(direction.pointA[0] == removedStopCoordinates[0] && direction.pointA[1] == removedStopCoordinates[1]){
+            newPointB = direction.pointB
+          }
+          
+          // If it is the point B, the new point A assumes the point A
+          if(direction.pointB[0] == removedStopCoordinates[0] && direction.pointB[1] == removedStopCoordinates[1]){
+            newPointA = direction.pointA
+          }
+
+          // This way, a new route will be defined when this is returned to the caller
+        }
+        
+        console.log(this.directions)
+      }
+    })
+
+    return { pointA: newPointA, pointB: newPointB, isEdgePoint }
+  }
 }
