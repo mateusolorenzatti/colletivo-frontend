@@ -8,7 +8,10 @@ const apiRoutes: { [key: string]: string } = {
   signup: '/auth/signup',
   getuser: '/auth/user',
 
-  stops: '/stops'
+  agency: '/agency',
+  routes: '/routes',
+  trips: '/trips',
+  stops: '/stops',
 }
 
 @Injectable({

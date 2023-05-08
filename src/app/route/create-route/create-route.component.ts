@@ -4,6 +4,10 @@ import { Stop } from 'src/app/core/entities/stop/stop';
 import { StopService } from 'src/app/core/entities/stop/stop.service';
 import { MapService } from 'src/app/core/map/map.service';
 import { MapComponent } from 'src/app/shared/map/map.component';
+import { RouteFormComponent } from './route-form/route-form.component';
+import { RouteService } from 'src/app/core/entities/route/route.service';
+import { Trip } from 'src/app/core/entities/trip/trip';
+import { TripService } from 'src/app/core/entities/trip/trip.service';
 
 @Component({
   selector: 'app-create-route',
@@ -15,10 +19,13 @@ export class CreateRouteComponent implements OnInit {
   stopTimeDraftList: StopTimeDraft[] = []
 
   @ViewChild('map') map: MapComponent
+  @ViewChild('form') form!: RouteFormComponent
 
   constructor(
     private stopService: StopService,
-    private mapService: MapService
+    private mapService: MapService,
+    private routeService: RouteService,
+    private tripService: TripService
   ) {
     this.map = new MapComponent()
   }
@@ -38,62 +45,62 @@ export class CreateRouteComponent implements OnInit {
               code: stop.stop_code,
               description: stop.stop_name + ''
             },
-            callbackFunc: (clickedStopId: string) => {
-              // Cannot select a stop twice
-              if(
-                this.stopTimeDraftList.length > 0 &&
-                this.stopTimeDraftList.filter(stop => stop.stop?.id == clickedStopId).length > 0
-              ){
-                return
-              }
-
-              this.stopTimeDraftList.push({
-                // arrival_time
-                stop_sequence: this.stopTimeDraftList.length + 1,
-                stop: this.stops.find(stop => stop.id == clickedStopId)
-              })
-
-              console.log(this.stopTimeDraftList)
-
-              let position = this.stopTimeDraftList.length
-
-              // Generates the route from the previous point
-              if(position > 1){
-                this.map.addDirections(
-                  // pointA
-                  [ 
-                    this.stopTimeDraftList[ position - 2 ].stop?.stop_lon as number,
-                    this.stopTimeDraftList[ position - 2 ].stop?.stop_lat as number 
-                  ],
-                  // pointB
-                  [ 
-                    this.stopTimeDraftList[ position - 1 ].stop?.stop_lon as number, 
-                    this.stopTimeDraftList[ position - 1 ].stop?.stop_lat as number
-                  ],
-                  this.mapService
-                )
-              }
-
-            }
-          }
-          )
+            callbackFunc: (clickedStopId: string) => this.onStopAdded(clickedStopId)
+          })
         )
       },
       error => console.log(error)
     )
   }
 
-  onStopTimeDraftRemoved(stopTimeDraft: StopTimeDraft) {
+  onStopAdded(clickedStopId: string) {
+    // Cannot select a stop twice
+    if (
+      this.stopTimeDraftList.length > 0 &&
+      this.stopTimeDraftList.filter(stop => stop.stop?.id == clickedStopId).length > 0
+    ) {
+      return
+    }
+
+    this.stopTimeDraftList.push({
+      // arrival_time
+      stop_sequence: this.stopTimeDraftList.length + 1,
+      stop: this.stops.find(stop => stop.id == clickedStopId)
+    })
+
+    console.log(this.stopTimeDraftList)
+
+    let position = this.stopTimeDraftList.length
+
+    // Generates the route from the previous point
+    if (position > 1) {
+      this.map.addDirections(
+        // pointA
+        [
+          this.stopTimeDraftList[position - 2].stop?.stop_lon as number,
+          this.stopTimeDraftList[position - 2].stop?.stop_lat as number
+        ],
+        // pointB
+        [
+          this.stopTimeDraftList[position - 1].stop?.stop_lon as number,
+          this.stopTimeDraftList[position - 1].stop?.stop_lat as number
+        ],
+        this.mapService
+      )
+    }
+  }
+
+  onStopRemoved(stopTimeDraft: StopTimeDraft) {
     const resultRecreateDirections = this.map.recreateDirections(
-      stopTimeDraft, 
+      stopTimeDraft,
       (
-        stopTimeDraft.stop?.id == this.stopTimeDraftList[0].stop?.id 
-        || 
+        stopTimeDraft.stop?.id == this.stopTimeDraftList[0].stop?.id
+        ||
         stopTimeDraft.stop?.id == this.stopTimeDraftList[this.stopTimeDraftList.length - 1].stop?.id
       )
     )
 
-    if(!resultRecreateDirections.isEdgePoint){
+    if (!resultRecreateDirections.isEdgePoint) {
       this.map.addDirections(
         resultRecreateDirections.pointA,
         resultRecreateDirections.pointB,
@@ -102,19 +109,40 @@ export class CreateRouteComponent implements OnInit {
     }
 
     this.stopTimeDraftList = this.stopTimeDraftList.filter(
-      stopTimeDraftTemp => 
-        !(stopTimeDraftTemp.stop?.id == stopTimeDraft.stop?.id 
-        && 
-        stopTimeDraftTemp.stop_sequence == stopTimeDraft.stop_sequence)
+      stopTimeDraftTemp =>
+        !(stopTimeDraftTemp.stop?.id == stopTimeDraft.stop?.id
+          &&
+          stopTimeDraftTemp.stop_sequence == stopTimeDraft.stop_sequence)
     )
 
-    
-
     this.stopTimeDraftList = this.stopTimeDraftList.map(
-      stopTime => { 
+      stopTime => {
         stopTime.stop_sequence = this.stopTimeDraftList.indexOf(stopTime) + 1
         return stopTime
-      } 
+      }
+    )
+  }
+
+  onSubmit(){
+    // Create Route
+    const route = this.form.submitRouteData()
+    this.routeService.create(route).subscribe(
+      resRoute => {
+        console.log(resRoute)
+        
+        // Create Trip
+        const trip = {
+          route: resRoute.id,
+          trip_short_name: route.short_name
+        } satisfies Trip
+        this.tripService.create(trip).subscribe(
+          resTrip => {
+            console.log(resTrip)
+
+            // Create Shapes
+          }
+        )
+      }
     )
   }
 }

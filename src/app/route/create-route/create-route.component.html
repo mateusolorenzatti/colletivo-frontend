@@ -12,7 +12,7 @@
         <co-header [text]="'Lista de Paradas'"> </co-header>
         <div class="">
             <div *ngFor="let stopTime of stopTimeDraftList">
-                <co-stop-time-item-create [stopTimeDraft]="stopTime" (removed)="onStopTimeDraftRemoved($event)"> </co-stop-time-item-create>
+                <co-stop-time-item-create [stopTimeDraft]="stopTime" (removed)="onStopRemoved($event)"> </co-stop-time-item-create>
             </div>
 
             <div *ngIf="stopTimeDraftList.length == 0">
@@ -27,14 +27,19 @@
 <div class="row p-3">
     <div class="col-10 offset-1">
         <co-header [text]="'Informações da Rota'"> </co-header>
-        <co-route-form></co-route-form>
+        <co-route-form #form></co-route-form>
     </div>
 </div>
 
 <div class="row p-3">
-    <div class="col-10 offset-1">
+    <div class="col-6 offset-1">
         <a class="btn btn-danger" [routerLink]="['/', 'home']">
             Voltar
+        </a>
+    </div>
+    <div class="col-4 ">
+        <a class="btn btn-success w-100" (click)="onSubmit()">
+            Criar Rota
         </a>
     </div>
 </div>

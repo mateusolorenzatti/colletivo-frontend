@@ -9,6 +9,7 @@ import { HeaderModule } from '../shared/header/header.module';
 import { StopTimeModule } from '../stop-time/stop-time.module';
 import { RouteFormComponent } from './create-route/route-form/route-form.component';
 import { MapService } from '../core/map/map.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MapService } from '../core/map/map.service';
   imports: [
     CommonModule,
     RouteRoutingModule,
+    ReactiveFormsModule,
     MapModule,
     HeaderModule,
     StopTimeModule

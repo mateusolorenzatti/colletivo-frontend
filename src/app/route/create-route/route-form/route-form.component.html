@@ -1,18 +1,25 @@
 <div class="card p-2">
-    <form>
+    <form [formGroup]="form">
         <div class="form-group m-1">
             <label for="tituloCurto">Título Curto:</label>
-            <input type="text" class="form-control" id="tituloCurto" name="tituloCurto"
+            <input type="text" class="form-control" formControlName="tituloCurto" id="tituloCurto" name="tituloCurto"
                 placeholder="Insira o título curto">
         </div>
         <div class="form-group m-1">
             <label for="titulo">Título:</label>
-            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Insira o título">
+            <input type="text" class="form-control" formControlName="titulo" id="titulo" name="titulo" placeholder="Insira o título">
         </div>
         <div class="form-group m-1">
             <label for="descricao">Descrição:</label>
-            <textarea class="form-control" id="descricao" name="descricao" rows="5"
+            <textarea class="form-control" id="descricao" formControlName="descricao" name="descricao" rows="5"
                 placeholder="Insira a descrição"></textarea>
         </div>
+
+        <div class="form-group m-1">
+            <label for="selectAgency"> Agência </label>
+            <select class="form-control" id="selectAgency" formControlName="selectAgency">
+              <option *ngFor="let item of agency" [value]="item.id"> {{ item.name }} </option>
+            </select>
+          </div>
     </form>
 </div>
