@@ -303,4 +303,24 @@ export class MapComponent implements OnInit {
 
     return { pointA: newPointA, pointB: newPointB, isEdgePoint }
   }
+
+  getDirectionsDetail(): Array<Array<number>>{
+    const coordinates: Array<Array<number>> = []
+    
+    this.directions.forEach(item => {
+      coordinates.push(...this.getCoordinates(item.data.routes[0].legs[0].steps))
+    })
+
+    return coordinates
+  }
+
+  getCoordinates(steps: Array<{ geometry: { coordinates: Array<Array<number>> } }>): Array<Array<number>> {
+    const coordinates: Array<Array<number>> = [];
+    steps.forEach(step => {
+      coordinates.push(...step.geometry.coordinates);
+    });
+
+    return coordinates;
+  }
+
 }

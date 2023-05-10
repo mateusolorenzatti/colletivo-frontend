@@ -20,6 +20,7 @@ export class RouteFormComponent {
       tituloCurto: '',
       titulo: '',
       descricao: '',
+      serviceId: '',
       selectAgency: ''
     });
   }
@@ -40,4 +41,9 @@ export class RouteFormComponent {
   
     return route
   }
+
+  getServiceId(): string {
+    return this.form.get('serviceId')?.value
+  }
+
 }

@@ -11,6 +11,7 @@ const apiRoutes: { [key: string]: string } = {
   agency: '/agency',
   routes: '/routes',
   trips: '/trips',
+  shapes: '/shapes',
   stops: '/stops',
 }
 

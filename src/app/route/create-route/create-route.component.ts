@@ -8,6 +8,8 @@ import { RouteFormComponent } from './route-form/route-form.component';
 import { RouteService } from 'src/app/core/entities/route/route.service';
 import { Trip } from 'src/app/core/entities/trip/trip';
 import { TripService } from 'src/app/core/entities/trip/trip.service';
+import { Shape } from 'src/app/core/entities/shape/shape';
+import { ShapeService } from 'src/app/core/entities/shape/shape.service';
 
 @Component({
   selector: 'app-create-route',
@@ -25,7 +27,8 @@ export class CreateRouteComponent implements OnInit {
     private stopService: StopService,
     private mapService: MapService,
     private routeService: RouteService,
-    private tripService: TripService
+    private tripService: TripService,
+    private shapeService: ShapeService,
   ) {
     this.map = new MapComponent()
   }
@@ -126,6 +129,11 @@ export class CreateRouteComponent implements OnInit {
   onSubmit(){
     // Create Route
     const route = this.form.submitRouteData()
+    const serviceId = this.form.getServiceId()
+
+    // console.log(this.map.getDirectionsDetail())
+    const shapes: Array<Shape> = []  
+
     this.routeService.create(route).subscribe(
       resRoute => {
         console.log(resRoute)
@@ -133,13 +141,30 @@ export class CreateRouteComponent implements OnInit {
         // Create Trip
         const trip = {
           route: resRoute.id,
-          trip_short_name: route.short_name
+          trip_short_name: route.short_name,
+          service_id: serviceId
         } satisfies Trip
         this.tripService.create(trip).subscribe(
           resTrip => {
             console.log(resTrip)
 
             // Create Shapes
+            this.map.getDirectionsDetail().forEach((coordinate, index) => {
+              shapes.push(
+                {
+                  trip: resTrip.id,
+                  shape_id: Number((serviceId as unknown) as number),
+                  pt_sequence: index + 1,
+                  pt_lat: coordinate[1] as unknown as string,
+                  pt_lon: coordinate[0] as unknown as string
+                } satisfies Shape
+              )
+            })
+
+            shapes.forEach(shape => this.shapeService.create(shape).subscribe(
+              res => console.log(res), 
+              error => console.log(error)
+            ))      
           }
         )
       }
