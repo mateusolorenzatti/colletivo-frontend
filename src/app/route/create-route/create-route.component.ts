@@ -10,6 +10,10 @@ import { Trip } from 'src/app/core/entities/trip/trip';
 import { TripService } from 'src/app/core/entities/trip/trip.service';
 import { Shape } from 'src/app/core/entities/shape/shape';
 import { ShapeService } from 'src/app/core/entities/shape/shape.service';
+import { Observable, forkJoin } from 'rxjs';
+import { StopTime } from 'src/app/core/entities/stop-time/stop-time';
+import { StopTimeCreate } from 'src/app/core/entities/stop-time/stop-time-create';
+import { StopTimeService } from 'src/app/core/entities/stop-time/stop-time.service';
 
 @Component({
   selector: 'app-create-route',
@@ -29,6 +33,7 @@ export class CreateRouteComponent implements OnInit {
     private routeService: RouteService,
     private tripService: TripService,
     private shapeService: ShapeService,
+    private stopTimeService: StopTimeService,
   ) {
     this.map = new MapComponent()
   }
@@ -126,18 +131,19 @@ export class CreateRouteComponent implements OnInit {
     )
   }
 
-  onSubmit(){
-    // Create Route
+  onSubmit() {
+    // Define data
     const route = this.form.submitRouteData()
     const serviceId = this.form.getServiceId()
 
     // console.log(this.map.getDirectionsDetail())
-    const shapes: Array<Shape> = []  
+    const shapes: Array<Shape> = []
 
+    // Create Route
     this.routeService.create(route).subscribe(
       resRoute => {
         console.log(resRoute)
-        
+
         // Create Trip
         const trip = {
           route: resRoute.id,
@@ -153,7 +159,7 @@ export class CreateRouteComponent implements OnInit {
               shapes.push(
                 {
                   trip: resTrip.id,
-                  shape_id: Number((serviceId as unknown) as number),
+                  shape_id: serviceId,
                   pt_sequence: index + 1,
                   pt_lat: coordinate[1] as unknown as string,
                   pt_lon: coordinate[0] as unknown as string
@@ -161,10 +167,30 @@ export class CreateRouteComponent implements OnInit {
               )
             })
 
-            shapes.forEach(shape => this.shapeService.create(shape).subscribe(
-              res => console.log(res), 
-              error => console.log(error)
-            ))      
+            const shapesRequestList: Observable<Shape>[] = []
+
+            shapes.forEach(shape => shapesRequestList.push(this.shapeService.create(shape)))
+
+            forkJoin(...shapesRequestList).subscribe(resShapes => {
+              console.log(resShapes)
+
+              // Create StopTimes
+              const stopTimes: Array<StopTimeCreate> = this.stopTimeDraftList.map((stopTime) => {
+                return {
+                  // ToDo -> Access the real arrival time data
+                  arrival_time: stopTime.arrival_time ? stopTime.arrival_time : '15:00:00',
+                  stop_sequence: stopTime.stop_sequence,
+                  stop: stopTime.stop?.id,
+                  trip: resTrip.id
+                } satisfies StopTimeCreate
+              })
+
+              const stopTimeRequestList: Observable<StopTime>[] = []
+
+              stopTimes.forEach(stopTime => stopTimeRequestList.push(this.stopTimeService.create(stopTime)))
+
+              forkJoin(...stopTimeRequestList).subscribe(stopTimes => console.log(stopTimes))
+            })
           }
         )
       }

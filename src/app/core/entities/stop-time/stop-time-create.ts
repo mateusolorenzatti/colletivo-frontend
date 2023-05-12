@@ -1,6 +1,6 @@
 import { Stop } from "../stop/stop";
 
-export interface StopTime {
+export interface StopTimeCreate {
     arrival_time?: string
     departure_time?: string
     stop_sequence?: number
@@ -20,8 +20,6 @@ export interface StopTime {
     pickup_service_area_radius?: string
     drop_off_service_area_radius?: string
   
-    stop_id?: string
-    trip_id?: string
-  
-    stop?: Stop
+    stop?: string
+    trip?: string
 }
