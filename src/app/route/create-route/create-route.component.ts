@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChild } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { StopTimeDraft } from 'src/app/core/entities/stop-time/stop-time-draft';
 import { Stop } from 'src/app/core/entities/stop/stop';
 import { StopService } from 'src/app/core/entities/stop/stop.service';
@@ -14,6 +14,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { StopTime } from 'src/app/core/entities/stop-time/stop-time';
 import { StopTimeCreate } from 'src/app/core/entities/stop-time/stop-time-create';
 import { StopTimeService } from 'src/app/core/entities/stop-time/stop-time.service';
+import { StopTimeItemCreateComponent } from 'src/app/stop-time/stop-time-item-create/stop-time-item-create.component';
 
 @Component({
   selector: 'app-create-route',
@@ -26,6 +27,8 @@ export class CreateRouteComponent implements OnInit {
 
   @ViewChild('map') map: MapComponent
   @ViewChild('form') form!: RouteFormComponent
+
+  @ViewChildren(StopTimeItemCreateComponent) stopTimeComponents!: QueryList<StopTimeItemCreateComponent>
 
   constructor(
     private stopService: StopService,
@@ -136,6 +139,15 @@ export class CreateRouteComponent implements OnInit {
     const route = this.form.submitRouteData()
     const serviceId = this.form.getServiceId()
 
+    // Get each stop-time arrival time from the component
+    this.stopTimeComponents.forEach(stopTimeComponent => {
+      this.stopTimeDraftList.forEach(stopTimeDraft => {
+        if(stopTimeDraft.stop?.id == stopTimeComponent.getStopTime().stop?.id){
+          stopTimeDraft.arrival_time = stopTimeComponent.getTime() + ':00'
+        }
+      })
+    })
+    
     // console.log(this.map.getDirectionsDetail())
     const shapes: Array<Shape> = []
 
@@ -178,7 +190,7 @@ export class CreateRouteComponent implements OnInit {
               const stopTimes: Array<StopTimeCreate> = this.stopTimeDraftList.map((stopTime) => {
                 return {
                   // ToDo -> Access the real arrival time data
-                  arrival_time: stopTime.arrival_time ? stopTime.arrival_time : '15:00:00',
+                  arrival_time: stopTime.arrival_time,
                   stop_sequence: stopTime.stop_sequence,
                   stop: stopTime.stop?.id,
                   trip: resTrip.id

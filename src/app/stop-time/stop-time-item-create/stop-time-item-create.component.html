@@ -1,13 +1,13 @@
 <div class="card p-2 m-1">
     <div class="row col-12">
         <div class="col-1">
-            <p class="my-2 text font-weight-bold"> # {{ stopTimeDraft?.stop_sequence }} </p>
+            <p class="my-2 text font-weight-bold"> # {{ stopTimeDraft.stop_sequence }} </p>
         </div>
         <div class="col-7">
-            <p class="my-2"> {{ stopTimeDraft?.stop?.stop_code }} - {{ stopTimeDraft?.stop?.stop_name }} </p>
+            <p class="my-2"> {{ stopTimeDraft.stop?.stop_code }} - {{ stopTimeDraft.stop?.stop_name }} </p>
         </div>
         <div class="col-3">
-            <input type="text" class="form-control" id="input-example" placeholder="15:00">
+            <input #timeImput type="text" class="form-control" id="timeImput" placeholder="15:00">
         </div>
         <div class="col-1 text-right">
             <a class="btn btn-danger float-right" (click)="remove()">
