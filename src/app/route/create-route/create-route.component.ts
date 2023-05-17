@@ -6,7 +6,7 @@ import { MapService } from 'src/app/core/map/map.service';
 import { MapComponent } from 'src/app/shared/map/map.component';
 import { RouteFormComponent } from './route-form/route-form.component';
 import { RouteService } from 'src/app/core/entities/route/route.service';
-import { Trip } from 'src/app/core/entities/trip/trip';
+import { TripCreate } from 'src/app/core/entities/trip/trip-create';
 import { TripService } from 'src/app/core/entities/trip/trip.service';
 import { Shape } from 'src/app/core/entities/shape/shape';
 import { ShapeService } from 'src/app/core/entities/shape/shape.service';
@@ -161,7 +161,7 @@ export class CreateRouteComponent implements OnInit {
           route: resRoute.id,
           trip_short_name: route.short_name,
           service_id: serviceId
-        } satisfies Trip
+        } satisfies TripCreate
         this.tripService.create(trip).subscribe(
           resTrip => {
             console.log(resTrip)

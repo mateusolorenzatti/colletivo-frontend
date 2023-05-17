@@ -1,10 +1,6 @@
-import { Route } from "../route/route"
-import { StopTime } from "../stop-time/stop-time"
-
-export interface Trip {
+export interface TripCreate {
     id?: string
-    route?: Route
-    stop_times?: StopTime[]
+    route?: string
     service_id?: string
     trip_short_name?: string
     trip_headsign?: string

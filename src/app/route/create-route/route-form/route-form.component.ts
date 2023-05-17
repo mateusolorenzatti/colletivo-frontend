@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Agency } from 'src/app/core/entities/agency/agency';
 import { AgencyService } from 'src/app/core/entities/agency/agency.service';
-import { Route } from 'src/app/core/entities/route/route';
+import { RouteCreate } from 'src/app/core/entities/route/route-create';
 
 @Component({
   selector: 'co-route-form',
@@ -31,13 +31,13 @@ export class RouteFormComponent {
     });
   }
 
-  submitRouteData(): Route{
+  submitRouteData(): RouteCreate{
     const route = {
       agency: this.form.get('selectAgency')?.value,
       short_name: this.form.get('tituloCurto')?.value,
       long_name: this.form.get('titulo')?.value,
       desc: this.form.get('descricao')?.value
-    } satisfies Route
+    } satisfies RouteCreate
   
     return route
   }

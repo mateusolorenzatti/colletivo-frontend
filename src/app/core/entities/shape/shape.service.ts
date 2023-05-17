@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../../config/config.service';
 import { Observable } from 'rxjs';
@@ -14,9 +14,19 @@ export class ShapeService {
     private configService: ConfigService
   ) { }
 
-  public findAll(): Observable<Shape[]> {
+  public findAll(shape_id: string): Observable<Shape[]> {    
+    let params
+    
+    if(shape_id){ 
+      console.log(shape_id)
+      params = new HttpParams().set('shape_id', shape_id)
+    }else{
+      params = new HttpParams()
+    }
+    
     return this.http.get<Shape[]>(
-      this.configService.getURL('shapes')
+      this.configService.getURL('shapes'),
+      { params }
     )
   }
 

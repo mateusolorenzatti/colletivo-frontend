@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../../config/config.service';
 import { Observable } from 'rxjs';
+import { TripCreate } from './trip-create';
 import { Trip } from './trip';
 
 @Injectable({
@@ -20,8 +21,14 @@ export class TripService {
     )
   }
 
-  public create(trip: Trip): Observable<Trip>{
-    return this.http.post<any>(
+  public findOne(id: string): Observable<Trip> {
+    return this.http.get<Trip>(
+      this.configService.getURL('trips') + '/' + id 
+    )
+  }
+
+  public create(trip: TripCreate): Observable<Trip>{
+    return this.http.post<Trip>(
       this.configService.getURL('trips'),
       trip
     )

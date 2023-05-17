@@ -1,8 +1,6 @@
-import { Agency } from "../agency/agency"
-
-export interface Route {
+export interface RouteCreate {
     id?: string
-    agency?: Agency
+    agency?: string
     short_name?: string
     long_name?: string
     desc?: string

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConfigService } from '../../config/config.service';
+import { RouteCreate } from './route-create';
 import { Route } from './route';
 
 @Injectable({
@@ -20,8 +21,8 @@ export class RouteService {
     )
   }
 
-  public create(route: Route): Observable<Route>{
-    return this.http.post<any>(
+  public create(route: RouteCreate): Observable<Route>{
+    return this.http.post<Route>(
       this.configService.getURL('routes'),
       route
     )
