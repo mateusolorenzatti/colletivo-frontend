@@ -1,1 +1,3 @@
-<h5 class="card bg-dark text-light p-3"> {{ text }} </h5>
+<h5 *ngIf="type == 'normal'" class="card bg-dark text-light p-3"> {{ text }} </h5>
+
+<h5 *ngIf="type == 'title'" class="card bg-main text-light text-center p-3"> {{ text }} </h5>

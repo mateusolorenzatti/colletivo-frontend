@@ -1,8 +1,58 @@
 <div class="row p-3">
     <div class="col-10 offset-1">
+        <co-header *ngIf="trip" [text]="'Trajeto ' + trip!.service_id! + ' - ' + route!.short_name!" [type]="'title'">
+        </co-header>
         <co-header [text]="'Mapa do Trajeto'"> </co-header>
-        <!-- <div class="card">
-            <co-map #map [editable]="true"> </co-map>
-        </div> -->
+        <div class="card">
+            <co-map #map [editable]="false"> </co-map>
+        </div>
+    </div>
+</div>
+
+<div class="row p-3">
+    <div class="col-10 offset-1">
+        <co-header [text]="'Lista de Paradas'"> </co-header>
+        <div class="">
+            <div *ngFor="let stopTime of stopTimes">
+                <co-stop-time-item [stopTime]="stopTime" [editable]="false"> </co-stop-time-item>
+            </div>
+
+            <div *ngIf="stopTimes">
+                <div *ngIf="stopTimes!.length == 0">
+                    <div class="card">
+                        <p class="m-2 text-muted text-center"> Selecione as paradas no mapa para adicionar ao trajeto
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row p-3">
+    <div *ngIf="route" class="col-10 offset-1">
+        <co-header [text]="'Informações da Rota e Trajeto'"> </co-header>
+        <div class="card p-2">
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td>ID do Trajeto</td>
+                        <td>{{ trip!.service_id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Título Curto</td>
+                        <td>{{ route!.short_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Título Longo</td>
+                        <td>{{ route!.long_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Descrição</td>
+                        <td> {{ route!.desc }}</td>
+                    </tr>                    
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

@@ -1,0 +1,28 @@
+<div class="card p-2 m-1">
+    <div class="row col-12">
+        <div class="col-1">
+            <p class="my-2 text font-weight-bold"> # {{ stopTimeDraft?.stop_sequence ? stopTimeDraft?.stop_sequence : stopTime?.stop_sequence }} </p>
+        </div>
+        <div class="col-7">
+            <p class="my-2"> 
+                {{ stopTimeDraft?.stop?.stop_code ? stopTimeDraft?.stop?.stop_code : stopTime?.stop?.stop_code }} 
+                - 
+                {{ stopTimeDraft?.stop?.stop_name ? stopTimeDraft?.stop?.stop_name : stopTime?.stop?.stop_name}} 
+            </p>
+        </div>
+        
+        <div *ngIf="editable" class="col-3">
+            <input #timeImput type="text" class="form-control" id="timeImput" placeholder="15:00">
+        </div>
+
+        <div *ngIf="!editable" class="col-4 text-center">
+            <p class="my-2"> {{ stopTime?.arrival_time }} </p>
+        </div>
+
+        <div *ngIf="editable" class="col-1 text-right">
+            <a class="btn btn-danger float-right" (click)="remove()">
+                <i tabindex="0" class="fa fa-trash mx-3"></i>
+            </a> 
+        </div>
+    </div>
+</div>

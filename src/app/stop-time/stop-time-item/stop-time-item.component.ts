@@ -1,12 +1,15 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { StopTime } from 'src/app/core/entities/stop-time/stop-time';
 import { StopTimeDraft } from 'src/app/core/entities/stop-time/stop-time-draft';
 
 @Component({
-  selector: 'co-stop-time-item-create',
-  templateUrl: './stop-time-item-create.component.html'
+  selector: 'co-stop-time-item',
+  templateUrl: './stop-time-item.component.html'
 })
-export class StopTimeItemCreateComponent {
-  @Input('stopTimeDraft') stopTimeDraft!: StopTimeDraft
+export class StopTimeItemComponent {
+  @Input('stopTimeDraft') stopTimeDraft?: StopTimeDraft
+  @Input('stopTime') stopTime?: StopTime
+  @Input('editable') editable: Boolean = false
 
   @ViewChild('timeImput', {static: false}) timeInput!: ElementRef
 
@@ -17,7 +20,7 @@ export class StopTimeItemCreateComponent {
   }
 
   getStopTime(): StopTimeDraft{
-    return this.stopTimeDraft
+    return this.stopTimeDraft!
   }
 
   getTime(){

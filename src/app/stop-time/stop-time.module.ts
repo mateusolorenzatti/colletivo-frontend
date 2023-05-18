@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StopTimeItemCreateComponent } from './stop-time-item-create/stop-time-item-create.component';
-
-
+import { StopTimeItemComponent } from './stop-time-item/stop-time-item.component';
 
 @NgModule({
   declarations: [
-    StopTimeItemCreateComponent
+    StopTimeItemComponent
   ],
   exports:[
-    StopTimeItemCreateComponent
+    StopTimeItemComponent
   ],
   imports: [
     CommonModule

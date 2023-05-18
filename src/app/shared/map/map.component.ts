@@ -158,7 +158,7 @@ export class MapComponent implements OnInit {
       id: string,
       coordinates: [number, number],
       popupInfo?: { code: string, description: string },
-      callbackFunc: Function
+      callbackFunc?: Function
     }
   ) {
 
@@ -181,7 +181,9 @@ export class MapComponent implements OnInit {
         newMarker.setPopup(popup)
         newMarker.togglePopup()
 
-        newMarker.getElement().addEventListener('click', () => parameters.callbackFunc(parameters.id))
+        if(parameters.callbackFunc){
+          newMarker.getElement().addEventListener('click', () => parameters!.callbackFunc!(parameters.id))
+        }
 
         this.markers.push(newMarker)
       }

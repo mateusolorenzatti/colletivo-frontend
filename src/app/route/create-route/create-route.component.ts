@@ -14,7 +14,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { StopTime } from 'src/app/core/entities/stop-time/stop-time';
 import { StopTimeCreate } from 'src/app/core/entities/stop-time/stop-time-create';
 import { StopTimeService } from 'src/app/core/entities/stop-time/stop-time.service';
-import { StopTimeItemCreateComponent } from 'src/app/stop-time/stop-time-item-create/stop-time-item-create.component';
+import { StopTimeItemComponent } from 'src/app/stop-time/stop-time-item/stop-time-item.component';
 
 @Component({
   selector: 'app-create-route',
@@ -28,7 +28,7 @@ export class CreateRouteComponent implements OnInit {
   @ViewChild('map') map: MapComponent
   @ViewChild('form') form!: RouteFormComponent
 
-  @ViewChildren(StopTimeItemCreateComponent) stopTimeComponents!: QueryList<StopTimeItemCreateComponent>
+  @ViewChildren(StopTimeItemComponent) stopTimeComponents!: QueryList<StopTimeItemComponent>
 
   constructor(
     private stopService: StopService,

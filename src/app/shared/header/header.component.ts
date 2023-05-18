@@ -6,4 +6,5 @@ import { Component, Input } from '@angular/core';
 })
 export class HeaderComponent {
   @Input('text') text: string = 'No text'
+  @Input('type') type: string = 'normal'
 }
