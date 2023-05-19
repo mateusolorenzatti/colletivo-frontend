@@ -15,6 +15,7 @@ import { StopTime } from 'src/app/core/entities/stop-time/stop-time';
 import { StopTimeCreate } from 'src/app/core/entities/stop-time/stop-time-create';
 import { StopTimeService } from 'src/app/core/entities/stop-time/stop-time.service';
 import { StopTimeItemComponent } from 'src/app/stop-time/stop-time-item/stop-time-item.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-route',
@@ -31,6 +32,7 @@ export class CreateRouteComponent implements OnInit {
   @ViewChildren(StopTimeItemComponent) stopTimeComponents!: QueryList<StopTimeItemComponent>
 
   constructor(
+    private router: Router,
     private stopService: StopService,
     private mapService: MapService,
     private routeService: RouteService,
@@ -201,7 +203,12 @@ export class CreateRouteComponent implements OnInit {
 
               stopTimes.forEach(stopTime => stopTimeRequestList.push(this.stopTimeService.create(stopTime)))
 
-              forkJoin(...stopTimeRequestList).subscribe(stopTimes => console.log(stopTimes))
+              forkJoin(...stopTimeRequestList).subscribe(
+                stopTimes => {
+                  console.log(stopTimes)
+                  this.router.navigate(['/trip', resTrip.id]);
+                }
+              )
             })
           }
         )
