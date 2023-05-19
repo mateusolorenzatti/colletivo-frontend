@@ -10,7 +10,7 @@ import { TripService } from 'src/app/core/entities/trip/trip.service';
 import { MapComponent } from 'src/app/shared/map/map.component';
 
 @Component({
-  selector: 'app-trip-detail',
+  selector: 'co-trip-detail',
   templateUrl: './trip-detail.component.html'
 })
 export class TripDetailComponent {
@@ -73,5 +73,9 @@ export class TripDetailComponent {
       ]),
       '#1155cc'
     )
+  }
+
+  deleteRoute(){
+    
   }
 }

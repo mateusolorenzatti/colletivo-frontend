@@ -1,0 +1,22 @@
+<div *ngIf="trip" class="card p-2 m-1">
+    <div class="row col-12">
+        <div class="col-3">
+            {{ trip.service_id }}
+        </div>
+        <div class="col-5">
+            <p class="my-2"> 
+                {{ trip.route!.short_name }}
+            </p>
+        </div>
+        
+        <div class="col-3">
+            
+        </div>
+
+        <div class="col-1 text-right">
+            <a class="btn btn-second float-right" [routerLink]="['/', 'trip', trip.id!]">
+                <i tabindex="0" class="fa fa-info mx-3"></i>
+            </a> 
+        </div>
+    </div>
+</div>

@@ -33,4 +33,10 @@ export class TripService {
       trip
     )
   }
+
+  public delete(trip_id: string): Observable<any>{
+    return this.http.delete<any>(
+      this.configService.getURL('trips') + '/' + trip_id 
+    )
+  }
 }

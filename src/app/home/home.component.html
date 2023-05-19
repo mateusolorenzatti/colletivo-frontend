@@ -1,22 +1,41 @@
 <div class="row m-3">
     <div class="col-6">
-        <a class="btn btn-lg btn-dark py-5 w-100" [routerLink]="['/', 'route', 'create']">
-            <i class="fa fa-map mx-2"></i>
+        <a class="btn btn-lg btn-main py-5 w-100" [routerLink]="['/', 'route', 'create']">
+            <i class="fa fa-plus mx-2"></i>
             Criar Rota
         </a>
     </div>
     <div class="col-3">
-        <button class="btn btn-lg btn-dark py-5 w-100">
-            <i class="fa fa-map-marker mx-2"></i>
+        <button class="btn btn-lg btn-dark py-5 w-100 disabled">
+            <i class="fa fa-plus mx-2"></i>
             Criar Parada
         </button>
     </div>
     <div class="col-3">
-        <button class="btn btn-lg btn-dark py-5 w-100">
+        <button class="btn btn-lg btn-second py-5 w-100 disabled">
+            <i class="fa fa-upload"></i>
+            Upload 
+        </button>
+    </div>
+</div>
+
+<div class="row m-3">
+    <div class="col-3">
+        <button class="btn btn-lg btn-dark py-5 w-100 disabled">
+            <i class="fa fa-map-marker mx-2"></i>
+            Paradas
+        </button>
+    </div>
+    <div class="col-3">
+        <button class="btn btn-lg btn-second py-5 w-100 disabled">
             <i class="fa fa-star"></i>
             Click Here
         </button>
     </div>
-    
-
+    <div class="col-6">
+        <a class="btn btn-lg btn-main py-5 w-100" [routerLink]="['/', 'trip']">
+            <i class="fa fa-map mx-2"></i>
+            Trajetos
+        </a>
+    </div>
 </div>

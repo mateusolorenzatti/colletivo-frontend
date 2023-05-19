@@ -56,3 +56,32 @@
         </div>
     </div>
 </div>
+
+<div class="row p-3">
+    <div *ngIf="route" class="col-10 offset-1">
+        <co-header [text]="'Ações'"> </co-header>
+        <div class="card p-2">
+            <div class="col-12 row">
+                <div class="col-4">
+                    <a class="btn btn-danger w-100" (click)="deleteRoute()">
+                        <i tabindex="0" class="fa fa-trash"></i>
+                        Excluir Trajeto
+                    </a>
+                </div>
+                <div class="col-4">
+                    <a class="btn btn-second disabled w-100">
+                        <i tabindex="0" class="fa fa-pencil"></i>
+                        Editar Trajeto
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
