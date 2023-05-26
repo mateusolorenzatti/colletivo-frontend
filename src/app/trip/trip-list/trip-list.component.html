@@ -7,5 +7,11 @@
                 <co-trip-list-item [trip]="trip"> </co-trip-list-item>
             </div>
         </div>
+
+        <div *ngIf="trips?.length == 0"> 
+            <div class="card m-2">
+                <p class="m-2 text-muted text-center"> Nada por aqui. Crie os trajetos para que eles apareçam por aqui. </p>
+            </div>
+        </div>
     </div>
 </div>
